@@ -1,9 +1,21 @@
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { LoginFormValues } from "../../api/tenant/types";
 
 function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>();
+
+  function onSubmit(data: LoginFormValues) {
+    console.log(data);
+  }
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
@@ -13,7 +25,10 @@ function LoginView() {
     <div className="border px-4 h-screen flex items-center bg-gray-50">
       <div className="w-full max-w-md mx-auto">
         <h1 className="h1 text-center mb-10">¡Bienvenido!</h1>
-        <form className="bg-blue-100/70 p-6 mb-16">
+        <form
+          className="bg-blue-100/70 p-6 mb-16"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <input placeholder="Correo electrónico *" className="input" />
           <div className="my-4" />
           <div className="grid grid-cols-[1fr_65px] gap-1 ">
@@ -35,7 +50,9 @@ function LoginView() {
             </button>
           </div>
           <div className="my-6" />
-          <button className="button w-full">INICIAR SESIÓN</button>
+          <button className="button w-full" type="submit">
+            INICIAR SESIÓN
+          </button>
           <div className="my-1" />
           <Link
             href="/forgot-password"

@@ -53,15 +53,20 @@ function Select({ options, defaultOption }: Props) {
       </button>
       {open && options.length > 0 ? (
         <div className="absolute bottom-100 w-full z-10 p-1 max-h-40 overflow-y-auto scrollbar-hide scroll-bar">
-          {options.map((option) => (
-            <button
-              type="button"
-              className="block text-center bg-white font-light hover:bg-gray-50 w-full py-1 transition-all border-b-white hover:border-b-purple-700"
-              onClick={handleOptionClick(option)}
-            >
-              {option.component}
-            </button>
-          ))}
+          {options.map((option) => {
+            if (selectedOption && option.value === selectedOption?.value)
+              return;
+
+            return (
+              <button
+                type="button"
+                className="block text-center bg-white font-light hover:bg-gray-50 w-full py-1 transition-all border-b-white hover:border-b-purple-700"
+                onClick={handleOptionClick(option)}
+              >
+                {option.component}
+              </button>
+            );
+          })}
         </div>
       ) : null}
     </div>
