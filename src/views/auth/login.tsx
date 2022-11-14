@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { LoginFormValues } from "../../api/tenant/types";
+import { emailRegex, passwordRegex } from "../../utils/regex";
 
 function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,14 +30,36 @@ function LoginView() {
           className="bg-blue-100/70 p-6 mb-16"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <input placeholder="Correo electrónico *" className="input" />
+          <input
+            placeholder="Correo electrónico *"
+            className="input"
+            {...register("email", {
+              required: "El campo es requerido",
+              pattern: {
+                message: "Ingresa un correo electrónico válido",
+                value: emailRegex,
+              },
+            })}
+          />
+          {errors.email && (
+            <span className="input-err-msg">{errors.email?.message}</span>
+          )}
           <div className="my-4" />
           <div className="grid grid-cols-[1fr_65px] gap-1 ">
             <input
               placeholder="Contraseña *"
               className="input"
               type={showPassword ? "text" : "password"}
+              {...register("password", {
+                required: "El campo es requerido",
+                pattern: {
+                  message:
+                    "La contraseña tiene que tener más de 8 caracteres, una mayúscula y un número",
+                  value: passwordRegex,
+                },
+              })}
             />
+
             <button
               className="input flex justify-center bg-white"
               type="button"
@@ -49,6 +72,9 @@ function LoginView() {
               )}
             </button>
           </div>
+          {errors.password && (
+            <span className="input-err-msg">{errors.password?.message}</span>
+          )}
           <div className="my-6" />
           <button className="button w-full" type="submit">
             INICIAR SESIÓN

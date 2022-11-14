@@ -6,12 +6,16 @@
   @apply border-2 border-blue-100/70 p-4 rounded-md font-light outline-0 focus:border-purple-800 transition-all w-full;
 }
 
+.input-err-msg {
+  @apply text-red-500;
+}
+
 .button {
   @apply focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg px-5 py-2.5 mb-2;
 }
 
 .h1 {
-  @apply text-5xl font-medium;
+  @apply text-3xl font-medium md:text-5xl;
 }
 
 .link {
