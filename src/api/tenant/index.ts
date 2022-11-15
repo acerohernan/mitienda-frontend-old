@@ -1,16 +1,34 @@
 import { BASE_URL, fecthData } from "..";
 import { LoginFormValues, SignUpFormValues } from "./types";
 
-const headers = () => ({
-  "Content-Type": "application/json",
-});
-
 export const signUp = (data: SignUpFormValues) =>
   fecthData.post(`${BASE_URL}/tenant/auth/signup`, data, {
-    headers: headers(),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
 export const login = (data: LoginFormValues) =>
   fecthData.post(`/api/tenant/auth/login`, data, {
-    headers: headers(),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const logout = () => fecthData.delete(`/api/tenant/auth/logout`);
+
+export const getInformation = (token: string) =>
+  fecthData.get(`${BASE_URL}/tenant/information`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+export const getStoreInformation = (token: string) =>
+  fecthData.get(`${BASE_URL}/tenant/store/information`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   });

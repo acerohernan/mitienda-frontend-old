@@ -8,6 +8,7 @@ export interface ITenantState {
 export interface ITenantActions {
   signUp: (data: SignUpFormValues) => Promise<void>;
   login: (data: LoginFormValues) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export interface ITenantContext {

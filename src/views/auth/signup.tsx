@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { SignUpFormValues } from "../../api/tenant/types";
+import Button from "../../components/form/button";
 import Select, { Option } from "../../components/form/select";
 import { useTenantContext } from "../../context/tenant";
 import { emailRegex, onlyNumbersRegex } from "../../utils/regex";
@@ -142,8 +143,9 @@ function SignUpView() {
             </div>
           </div>
           <div className="my-6" />
-          <button className="button w-full">CREAR CUENTA</button>
-          {loading && <span>LOADING</span>}
+          <Button className="w-full" submit loading={loading}>
+            CREAR CUENTA
+          </Button>
           <div className="my-2" />
           <Link href="/login" className="link block text-center text-sm">
             Ingresa con tu cuenta

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { LoginFormValues } from "../../api/tenant/types";
+import Button from "../../components/form/button";
 import { useTenantContext } from "../../context/tenant";
-import { emailRegex, passwordRegex } from "../../utils/regex";
+import { emailRegex } from "../../utils/regex";
 
 function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,11 +59,6 @@ function LoginView() {
               type={showPassword ? "text" : "password"}
               {...register("password", {
                 required: "El campo es requerido",
-                pattern: {
-                  message:
-                    "La contraseña tiene que tener más de 8 caracteres, una mayúscula y un número",
-                  value: passwordRegex,
-                },
               })}
             />
 
@@ -82,10 +78,9 @@ function LoginView() {
             <span className="input-err-msg">{errors.password?.message}</span>
           )}
           <div className="my-6" />
-          <button className="button w-full" type="submit">
+          <Button className="w-full" submit loading={loading}>
             INICIAR SESIÓN
-          </button>
-          {loading && <span>Loading</span>}
+          </Button>
           <div className="my-1" />
           <Link
             href="/forgot-password"

@@ -1,14 +1,14 @@
-import { NextPageContext } from "next";
-import { publicRoute } from "../utils/server/publicRoute";
+import { withoutAuthentication } from "../utils/server/ssr";
 import SignUpView from "../views/auth/signup";
 
 function Signup() {
   return <SignUpView />;
 }
 
-export async function getServerSideProps(context: NextPageContext) {
-  publicRoute(context);
+export const getServerSideProps = withoutAuthentication((context) => {
+  return {
+    props: {},
+  };
+});
 
-  return { props: {} };
-}
 export default Signup;

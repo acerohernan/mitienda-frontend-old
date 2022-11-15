@@ -34,17 +34,28 @@ export const TenantProvider: React.FC<Props> = ({ children }) => {
   async function login(data: LoginFormValues) {
     setLoading(true);
     try {
-      const response = await API.tenant.login(data);
-      console.log(response);
+      await API.tenant.login(data);
       toast.success("Bienvenido nuevamente");
+      push("/admin");
     } catch (error: any) {
       toast.error(getHttpError(error));
     }
     setLoading(false);
   }
 
+  async function logout(): Promise<void> {
+    setLoading(true);
+    try {
+      await API.tenant.logout();
+      push("/login");
+    } catch (error: any) {
+      toast.error("Error al cerrar sessión");
+    }
+    setLoading(false);
+  }
+
   const state: ITenantState = { loading, tenant };
-  const actions: ITenantActions = { signUp, login };
+  const actions: ITenantActions = { signUp, login, logout };
 
   return (
     <TenantContext.Provider value={{ state, actions }}>
