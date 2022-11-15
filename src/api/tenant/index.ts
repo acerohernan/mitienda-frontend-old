@@ -11,6 +11,6 @@ export const signUp = (data: SignUpFormValues) =>
   });
 
 export const login = (data: LoginFormValues) =>
-  fecthData.post(`${BASE_URL}/tenant/auth/login`, data, {
+  fecthData.post(`/api/tenant/auth/login`, data, {
     headers: headers(),
   });

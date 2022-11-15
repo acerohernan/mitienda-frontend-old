@@ -3,24 +3,71 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { SignUpFormValues } from "../../api/tenant/types";
-import Select from "../../components/form/select";
+import Select, { Option } from "../../components/form/select";
+import { useTenantContext } from "../../context/tenant";
 import { emailRegex, onlyNumbersRegex } from "../../utils/regex";
+
+const COUNTRIES = [
+  {
+    code: "PE",
+    name: "Peru",
+    prefix: "51",
+    img_url:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_Peru_%28state%29.svg/1280px-Flag_of_Peru_%28state%29.svg.png",
+  },
+  {
+    code: "AR",
+    name: "Argentina",
+    prefix: "54",
+    img_url:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/1280px-Flag_of_Argentina.svg.png",
+  },
+  {
+    code: "US",
+    name: "United Stated",
+    prefix: "1",
+    img_url:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/800px-Flag_of_the_United_States.svg.png",
+  },
+];
 
 function SignUpView() {
   const [showPassword, setShowPassword] = useState(false);
+  const [options, setOptions] = useState<Option[]>(() => {
+    return COUNTRIES.map((country, index) => ({
+      component: (
+        <div className="flex items-center justify-center" key={index}>
+          <img src={country.img_url} className="w-5 h-5" />
+          <span className="ml-2">({country.prefix})</span>
+        </div>
+      ),
+      value: country.code,
+    }));
+  });
+
+  const {
+    actions: { signUp },
+    state: { loading },
+  } = useTenantContext();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SignUpFormValues>();
 
-  function onSubmit(data: SignUpFormValues) {
+  async function onSubmit(data: SignUpFormValues) {
     console.log(data);
+    await signUp(data);
   }
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
+  }
+
+  function handleCountryCode(code: string) {
+    setValue("country_code", code);
   }
 
   return (
@@ -74,44 +121,8 @@ function SignUpView() {
           <div className="my-6" />
           <div className="grid grid-cols-[120px_1fr] gap-1 ">
             <Select
-              options={[
-                {
-                  component: (
-                    <div className="flex items-center justify-center">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_Peru_%28state%29.svg/1280px-Flag_of_Peru_%28state%29.svg.png"
-                        className="w-5 h-5"
-                      />
-                      <span className="ml-2">(51)</span>
-                    </div>
-                  ),
-                  value: "PE",
-                },
-                {
-                  component: (
-                    <div className="flex items-center justify-center">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/1280px-Flag_of_Argentina.svg.png"
-                        className="w-5 h-5"
-                      />
-                      <span className="ml-2">(54)</span>
-                    </div>
-                  ),
-                  value: "AR",
-                },
-                {
-                  component: (
-                    <div className="flex items-center justify-center">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/800px-Flag_of_the_United_States.svg.png"
-                        className="w-5 h-5"
-                      />
-                      <span className="ml-2">(1)</span>
-                    </div>
-                  ),
-                  value: "US",
-                },
-              ]}
+              options={options}
+              onChange={(option) => handleCountryCode(option.value)}
             />
             <div>
               <input
@@ -132,6 +143,7 @@ function SignUpView() {
           </div>
           <div className="my-6" />
           <button className="button w-full">CREAR CUENTA</button>
+          {loading && <span>LOADING</span>}
           <div className="my-2" />
           <Link href="/login" className="link block text-center text-sm">
             Ingresa con tu cuenta

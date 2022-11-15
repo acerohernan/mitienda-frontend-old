@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
 
-interface Option {
+export interface Option {
   component: JSX.Element | JSX.Element[];
   value: any;
 }
@@ -9,15 +9,22 @@ interface Option {
 interface Props {
   options: Array<Option>;
   defaultOption?: Option;
+  onChange: (option: Option) => void;
 }
 
-function Select({ options, defaultOption }: Props) {
+function Select({ options, defaultOption, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
-    if (defaultOption) return defaultOption;
+    if (defaultOption) {
+      onChange(defaultOption);
+      return defaultOption;
+    }
 
-    if (options.length > 0) return options[0];
+    if (options.length > 0) {
+      onChange(options[0]);
+      return options[0];
+    }
 
     return null;
   });
@@ -28,8 +35,9 @@ function Select({ options, defaultOption }: Props) {
 
   function handleOptionClick(option: Option) {
     return () => {
-      setOpen(false);
+      onChange(option);
       setSelectedOption(option);
+      setOpen(false);
     };
   }
 
@@ -53,7 +61,7 @@ function Select({ options, defaultOption }: Props) {
       </button>
       {open && options.length > 0 ? (
         <div className="absolute bottom-100 w-full z-10 p-1 max-h-40 overflow-y-auto scrollbar-hide scroll-bar">
-          {options.map((option) => {
+          {options.map((option, index) => {
             if (selectedOption && option.value === selectedOption?.value)
               return;
 
@@ -62,6 +70,7 @@ function Select({ options, defaultOption }: Props) {
                 type="button"
                 className="block text-center bg-white font-light hover:bg-gray-50 w-full py-1 transition-all border-b-white hover:border-b-purple-700"
                 onClick={handleOptionClick(option)}
+                key={index}
               >
                 {option.component}
               </button>

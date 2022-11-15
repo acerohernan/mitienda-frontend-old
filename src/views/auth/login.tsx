@@ -3,10 +3,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { LoginFormValues } from "../../api/tenant/types";
+import { useTenantContext } from "../../context/tenant";
 import { emailRegex, passwordRegex } from "../../utils/regex";
 
 function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    state: { loading },
+    actions: { login },
+  } = useTenantContext();
 
   const {
     register,
@@ -14,8 +20,8 @@ function LoginView() {
     formState: { errors },
   } = useForm<LoginFormValues>();
 
-  function onSubmit(data: LoginFormValues) {
-    console.log(data);
+  async function onSubmit(data: LoginFormValues) {
+    await login(data);
   }
 
   function handleShowPassword() {
@@ -79,6 +85,7 @@ function LoginView() {
           <button className="button w-full" type="submit">
             INICIAR SESIÓN
           </button>
+          {loading && <span>Loading</span>}
           <div className="my-1" />
           <Link
             href="/forgot-password"
