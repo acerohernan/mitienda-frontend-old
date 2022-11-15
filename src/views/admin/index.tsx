@@ -1,0 +1,65 @@
+import { useState } from "react";
+import { AiOutlineHome, AiTwotoneHome } from "react-icons/ai";
+import { BsFillNutFill, BsNut } from "react-icons/bs";
+import { HiOutlineShoppingBag, HiShoppingBag } from "react-icons/hi";
+import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
+import AdminHeader from "./components/header";
+import AdminNavbar from "./components/navbar";
+import AdminConfig from "./views/config";
+import AdminHome from "./views/home";
+import AdminOrders from "./views/orders";
+import AdminProducts from "./views/products";
+
+export interface IAdminView {
+  label: string;
+  icon: JSX.Element;
+  activeIcon: JSX.Element;
+  component: JSX.Element;
+}
+
+const VIEWS: Array<IAdminView> = [
+  {
+    label: "Inicio",
+    component: <AdminHome />,
+    icon: <AiOutlineHome className="w-6 h-6" />,
+    activeIcon: <AiTwotoneHome className="w-6 h-6" />,
+  },
+  {
+    label: "Mis Pedidos",
+    component: <AdminOrders />,
+    icon: <MdOutlineDeliveryDining className="w-6 h-6" />,
+    activeIcon: <MdDeliveryDining className="w-6 h-6" />,
+  },
+  {
+    label: "Mis productos",
+    component: <AdminProducts />,
+    icon: <HiOutlineShoppingBag className="w-6 h-6" />,
+    activeIcon: <HiShoppingBag className="w-6 h-6" />,
+  },
+  {
+    label: "Configuración",
+    component: <AdminConfig />,
+    icon: <BsNut className="w-6 h-6" />,
+    activeIcon: <BsFillNutFill className="w-6 h-6" />,
+  },
+];
+
+function AdminView() {
+  const [view, setView] = useState<IAdminView>(VIEWS[0]);
+
+  function handleView(view: IAdminView) {
+    return () => setView(view);
+  }
+
+  return (
+    <div className="bg-gray-50 h-screen relative grid md:grid-cols-[280px_1fr]">
+      <AdminNavbar views={VIEWS} selectedView={view} handleView={handleView} />
+      <div className="relative">
+        <AdminHeader />
+        <div className="mt-16">{view.component}</div>
+      </div>
+    </div>
+  );
+}
+
+export default AdminView;

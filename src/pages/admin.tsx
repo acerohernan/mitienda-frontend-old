@@ -1,18 +1,16 @@
 import { InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import { API } from "../api";
 import {
   getTokenInServerSide,
   removeTokenInServerSide,
   withAuthentication,
 } from "../utils/server/ssr";
+import AdminView from "../views/admin";
 
 function StoreAdmin({}: InferGetServerSidePropsType<
   typeof getServerSideProps
 >) {
-  const { query } = useRouter();
-
-  return <div>{query.store} admin</div>;
+  return <AdminView />;
 }
 
 export default StoreAdmin;
