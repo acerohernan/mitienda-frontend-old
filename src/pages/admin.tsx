@@ -1,8 +1,7 @@
 import { InferGetServerSidePropsType } from "next";
 import { API } from "../api";
 import { AdminProvider } from "../context/admin/AdminContext";
-import { IStore } from "../context/admin/types";
-import { ITenant } from "../context/tenant/types";
+import { IStore, ITenant } from "../context/admin/types";
 import {
   getTokenInServerSide,
   removeTokenInServerSide,

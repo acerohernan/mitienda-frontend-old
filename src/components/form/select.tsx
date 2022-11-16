@@ -23,12 +23,10 @@ function Select({ options, defaultOption, onChange, className }: Props) {
 
   const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
     if (defaultOption) {
-      onChange(defaultOption);
       return defaultOption;
     }
 
     if (options.length > 0) {
-      onChange(options[0]);
       return options[0];
     }
 

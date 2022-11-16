@@ -13,7 +13,7 @@ const AdminConfigSocial: React.FC = () => {
   return (
     <div className="bg-white w-full shadow-md rounded-xl p-6">
       <div
-        className=" text-start text-xl font-ligth flex items-center justify-between cursor-pointer text-purple-900"
+        className=" text-start text-lg font-ligth flex items-center justify-between cursor-pointer text-purple-900"
         onClick={handleOpen}
       >
         Redes sociales

@@ -22,8 +22,8 @@ export const AdminProvider: React.FC<Props> = ({
   store: storeInitial,
   tenant: tenantInitial,
 }) => {
-  const [tenant, setTenant] = useState<ITenant | null>(storeInitial);
-  const [store, setStore] = useState<IStore | null>(tenantInitial);
+  const [tenant, setTenant] = useState<ITenant | null>(tenantInitial);
+  const [store, setStore] = useState<IStore | null>(storeInitial);
   const [loading, setLoading] = useState(false);
 
   const actions: IAdminActions = {};
