@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
+import useClickOutsideAction from "../../hooks/useClickOutsideAction";
 
 export interface Option {
   component: JSX.Element | JSX.Element[];
@@ -15,6 +16,10 @@ interface Props {
 
 function Select({ options, defaultOption, onChange, className }: Props) {
   const [open, setOpen] = useState(false);
+
+  const wrapperRef = useClickOutsideAction(() => {
+    setOpen(false);
+  });
 
   const [selectedOption, setSelectedOption] = useState<Option | null>(() => {
     if (defaultOption) {
@@ -43,7 +48,7 @@ function Select({ options, defaultOption, onChange, className }: Props) {
   }
 
   return (
-    <div className="border-0 border-black relative">
+    <div className="relative" ref={wrapperRef}>
       <button
         className={`border bg-white flex justify-between select ${
           open && "border-purple-700"
@@ -56,7 +61,7 @@ function Select({ options, defaultOption, onChange, className }: Props) {
           {open ? (
             <CgChevronUp className="w-6 h-6 text-purple-800" />
           ) : (
-            <CgChevronDown className="w-6 h-6 " />
+            <CgChevronDown className="w-6 h-6" />
           )}
         </div>
       </button>
@@ -69,7 +74,7 @@ function Select({ options, defaultOption, onChange, className }: Props) {
             return (
               <button
                 type="button"
-                className="block bg-white text-start font-light text-md hover:bg-gray-50 w-full  transition-all border-b-white hover:border-b-purple-700 px-4 py-2"
+                className="block bg-white text-start font-light text-md hover:bg-gray-50 w-full text-sm transition-all border-b-white hover:border-b-purple-700 px-4 py-2"
                 onClick={handleOptionClick(option)}
                 key={index}
               >

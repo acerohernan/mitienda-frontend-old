@@ -68,7 +68,7 @@ const AdminNavbar: React.FC<AdminNavBarProps> = ({
             />
           ))}
         </div>
-        <div className="border-t-2 border-gray-100 p-5 px-8 grid grid-rows-[1fr_50px] border-r border-gray-200">
+        <div className="border-t-2 p-5 px-8 grid grid-rows-[1fr_50px] border-r border-gray-200">
           <div>
             <span className="font-medium">Plan gratuito</span>
             <span className="font-light flex items-center justify-between text-sm mt-2">

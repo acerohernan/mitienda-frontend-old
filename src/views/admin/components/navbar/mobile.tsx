@@ -8,7 +8,7 @@ interface Props {
 
 const MobileNavbar: React.FC<Props> = ({ views, handleSelect, selected }) => {
   return (
-    <div className="grid grid-cols-4 items-center justify-evenly bg-white md:hidden w-full fixed border bottom-0 z-10">
+    <div className="grid grid-cols-5 items-center justify-evenly bg-white md:hidden w-full fixed border bottom-0 z-10">
       {views.map((view, index) => (
         <MobileNavBarItem
           active={selected.label === view.label}

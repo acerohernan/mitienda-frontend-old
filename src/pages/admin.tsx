@@ -1,5 +1,8 @@
 import { InferGetServerSidePropsType } from "next";
 import { API } from "../api";
+import { AdminProvider } from "../context/admin/AdminContext";
+import { IStore } from "../context/admin/types";
+import { ITenant } from "../context/tenant/types";
 import {
   getTokenInServerSide,
   removeTokenInServerSide,
@@ -7,15 +10,23 @@ import {
 } from "../utils/server/ssr";
 import AdminView from "../views/admin";
 
-function StoreAdmin({}: InferGetServerSidePropsType<
-  typeof getServerSideProps
->) {
-  return <AdminView />;
+function StoreAdmin({
+  store,
+  tenant,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  return (
+    <AdminProvider store={store} tenant={tenant}>
+      <AdminView />
+    </AdminProvider>
+  );
 }
 
 export default StoreAdmin;
 
-export const getServerSideProps = withAuthentication(async (context) => {
+export const getServerSideProps = withAuthentication<{
+  store: IStore;
+  tenant: ITenant;
+}>(async (context) => {
   const token = getTokenInServerSide(context);
 
   try {

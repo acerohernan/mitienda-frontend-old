@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AiOutlineHome, AiTwotoneHome } from "react-icons/ai";
 import { BsFillNutFill, BsNut } from "react-icons/bs";
+import { FaRegUser, FaUser } from "react-icons/fa";
 import { HiOutlineShoppingBag, HiShoppingBag } from "react-icons/hi";
 import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
 import AdminHeader from "./components/header";
@@ -9,6 +10,7 @@ import AdminConfig from "./views/config";
 import AdminHome from "./views/home";
 import AdminOrders from "./views/orders";
 import AdminProducts from "./views/products";
+import AdminProfile from "./views/profile";
 
 export interface IAdminView {
   label: string;
@@ -41,6 +43,12 @@ const VIEWS: Array<IAdminView> = [
     component: <AdminConfig />,
     icon: <BsNut className="w-6 h-6" />,
     activeIcon: <BsFillNutFill className="w-6 h-6" />,
+  },
+  {
+    label: "Profile",
+    component: <AdminProfile />,
+    icon: <FaRegUser className="w-6 h-6" />,
+    activeIcon: <FaUser className="w-6 h-6" />,
   },
 ];
 
