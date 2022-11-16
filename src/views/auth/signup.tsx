@@ -124,6 +124,7 @@ function SignUpView() {
             <Select
               options={options}
               onChange={(option) => handleCountryCode(option.value)}
+              className="p-3"
             />
             <div>
               <input

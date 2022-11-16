@@ -1,20 +1,21 @@
-import { INavItem } from ".";
+import { IAdminView } from "../..";
 
 interface Props {
-  items: Array<INavItem>;
-  selected: string;
-  handleSelect: (option: string) => () => void;
+  views: Array<IAdminView>;
+  selected: IAdminView;
+  handleSelect: (view: IAdminView) => () => void;
 }
 
-const MobileNavbar: React.FC<Props> = ({ items, handleSelect, selected }) => {
+const MobileNavbar: React.FC<Props> = ({ views, handleSelect, selected }) => {
   return (
-    <div className="grid grid-cols-4 items-center justify-evenly bg-white md:hidden w-full absolute border bottom-0 z-10">
-      {items.map((item) => (
+    <div className="grid grid-cols-4 items-center justify-evenly bg-white md:hidden w-full fixed border bottom-0 z-10">
+      {views.map((view, index) => (
         <MobileNavBarItem
-          active={selected === item.label}
-          activeIcon={item.activeIcon}
-          icon={item.icon}
-          onSelect={handleSelect(item.label)}
+          active={selected.label === view.label}
+          activeIcon={view.activeIcon}
+          icon={view.icon}
+          onSelect={handleSelect(view)}
+          key={index}
         />
       ))}
     </div>

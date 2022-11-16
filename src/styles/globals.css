@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 .input {
-  @apply border-2 border-blue-100/70 p-4 rounded-md font-light outline-0 focus:border-purple-800 transition-all w-full;
+  @apply border-2 border-gray-100 p-3 text-base rounded-md font-light outline-0 focus:border-purple-800 transition-all w-full;
+}
+
+.select {
+  @apply border-2 border-gray-100 rounded-md font-light outline-0  transition-all w-full focus:border-purple-800;
 }
 
 .input-err-msg {

@@ -4,7 +4,7 @@ import { FaUserAlt } from "react-icons/fa";
 
 const AdminHeader = () => {
   return (
-    <div className="bg-white p-6 py-2 absolute top-0 w-full flex items-center justify-between">
+    <div className="bg-white p-6 py-2 absolute top-0 w-full flex items-center justify-between border-b border-gray-200">
       <div>
         <h1 className="text-3xl font-light md:hidden">MiTienda</h1>
       </div>

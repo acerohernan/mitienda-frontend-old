@@ -2,21 +2,8 @@ import { useState } from "react";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
 import Button from "../../../../components/form/button";
 import Select from "../../../../components/form/select";
-import AdminConfigGeneral from "./general";
-import AdminConfigSocial from "./social";
 
-const AdminConfig = () => {
-  return (
-    <div className="p-4">
-      <div className="grid gap-4">
-        <AdminConfigGeneral />
-        <AdminConfigSocial />
-      </div>
-    </div>
-  );
-};
-
-const AdminCard: React.FC = () => {
+const AdminConfigSocial: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   function handleOpen() {
@@ -29,7 +16,7 @@ const AdminCard: React.FC = () => {
         className=" text-start text-xl font-ligth flex items-center justify-between cursor-pointer text-purple-900"
         onClick={handleOpen}
       >
-        Información general
+        Redes sociales
         {open ? (
           <CgChevronUp className="w-6 h-6 text-purple-900" />
         ) : (
@@ -80,4 +67,4 @@ const AdminCard: React.FC = () => {
   );
 };
 
-export default AdminConfig;
+export default AdminConfigSocial;

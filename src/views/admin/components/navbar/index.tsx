@@ -3,6 +3,7 @@ import { BsFillNutFill, BsNut } from "react-icons/bs";
 import { HiOutlineShoppingBag, HiShoppingBag } from "react-icons/hi";
 import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
 import { IAdminView } from "../..";
+import MobileNavbar from "./mobile";
 
 export interface INavItem {
   label: string;
@@ -46,16 +47,16 @@ const AdminNavbar: React.FC<AdminNavBarProps> = ({
 }) => {
   return (
     <>
-      {/* <MobileNavbar
-        items={views}
-        selected={viewSelected}
+      <MobileNavbar
+        views={views}
+        selected={selectedView}
         handleSelect={handleView}
-      /> */}
-      <div className="hidden md:grid h-screen grid-rows-[64px_1fr_220px] bg-white">
+      />
+      <div className="hidden md:grid h-screen grid-rows-[64px_1fr_220px] bg-white fixed w-72 z-10">
         <div className="flex items-center px-8">
           <h1 className="text-3xl font-light">MiTienda</h1>
         </div>
-        <div className="p-4 pt-0">
+        <div className="p-4 pt-0 border-r border-gray-200">
           {views.map((view, index) => (
             <NavBarItem
               key={index}
@@ -67,7 +68,7 @@ const AdminNavbar: React.FC<AdminNavBarProps> = ({
             />
           ))}
         </div>
-        <div className="border-t-2 border-gray-100 p-5 px-8 grid grid-rows-[1fr_50px]">
+        <div className="border-t-2 border-gray-100 p-5 px-8 grid grid-rows-[1fr_50px] border-r border-gray-200">
           <div>
             <span className="font-medium">Plan gratuito</span>
             <span className="font-light flex items-center justify-between text-sm mt-2">

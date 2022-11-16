@@ -52,11 +52,11 @@ function AdminView() {
   }
 
   return (
-    <div className="bg-gray-50 h-screen relative grid md:grid-cols-[280px_1fr]">
+    <div className="bg-gray-50 h-screen grid md:grid-cols-[1fr]">
       <AdminNavbar views={VIEWS} selectedView={view} handleView={handleView} />
-      <div className="relative">
+      <div className="">
         <AdminHeader />
-        <div className="mt-16">{view.component}</div>
+        <div className="mt-16 md:ml-72 mb-16 md:mb-0">{view.component}</div>
       </div>
     </div>
   );
