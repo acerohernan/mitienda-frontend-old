@@ -3,6 +3,7 @@ import {
   LoginFormValues,
   SignUpFormValues,
   UpdateStoreFormValues,
+  UpdateStoreSocialFormValues,
 } from "./types";
 
 export const signUp = (data: SignUpFormValues) =>
@@ -37,5 +38,16 @@ export const getStoreInformation = (token: string) =>
     },
   });
 
+export const getStoreSocialInformation = (token: string) =>
+  fecthData.get(`${BASE_URL}/tenant/store/social`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
 export const updateStoreInformation = (form: UpdateStoreFormValues) =>
   fecthData.put(`/api/tenant/store/information`, form);
+
+export const updateStoreSocial = (form: UpdateStoreSocialFormValues) =>
+  fecthData.put(`/api/tenant/store/social`, form);

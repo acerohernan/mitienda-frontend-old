@@ -11,7 +11,7 @@ import { useAdminContext } from "../../../../context/admin/hooks";
 import { onlyNumbersRegex } from "../../../../utils/regex";
 
 const AdminConfigGeneral: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   /* Form prefix */
   const [phonePrefix, setPhonePrefix] = useState("51");
@@ -19,7 +19,7 @@ const AdminConfigGeneral: React.FC = () => {
   const [category, setCategory] = useState<string>(CATEGORIES[0].name);
 
   const {
-    state: { store },
+    state: { store, loading },
     actions: { updateStore },
   } = useAdminContext();
 
@@ -88,16 +88,16 @@ const AdminConfigGeneral: React.FC = () => {
   }
 
   return (
-    <div className="bg-white w-full shadow-md rounded-xl p-6">
+    <div className="bg-white w-full shadow-sm border border-gray-200 rounded-xl p-6">
       <div
-        className=" text-start text-lg font-ligth flex items-center justify-between cursor-pointer text-purple-900"
+        className=" text-start text-lg font-ligth flex items-center justify-between cursor-pointer"
         onClick={handleOpen}
       >
         Información general
         {open ? (
-          <CgChevronUp className="w-6 h-6 text-purple-900" />
+          <CgChevronUp className="w-6 h-6" />
         ) : (
-          <CgChevronDown className="w-6 h-6 text-purple-900" />
+          <CgChevronDown className="w-6 h-6" />
         )}
       </div>
       {open ? (
@@ -155,7 +155,7 @@ const AdminConfigGeneral: React.FC = () => {
               }}
             />
             <div>
-              <label className="text-sm mb-2 inline-block">
+              <label className="text-sm mb-2 font-light inline-block">
                 Rubro de la tienda
               </label>
               <Select
@@ -176,7 +176,7 @@ const AdminConfigGeneral: React.FC = () => {
               />
             </div>
           </div>
-          <Button submit className="mt-5 w-full md:w-auto">
+          <Button submit className="mt-5 w-full md:w-auto" loading={loading}>
             Guardar cambios
           </Button>
         </form>

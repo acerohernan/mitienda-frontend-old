@@ -29,15 +29,16 @@ export const getServerSideProps = withAuthentication<{
   const token = getTokenInServerSide(context);
 
   try {
-    const [tenant, store] = await Promise.all([
+    const [tenant, store, social] = await Promise.all([
       API.tenant.getInformation(token),
       API.tenant.getStoreInformation(token),
+      API.tenant.getStoreSocialInformation(token),
     ]);
 
     return {
       props: {
         tenant: tenant.data.tenant,
-        store: store.data.store,
+        store: { ...store.data.store, social: social.data.social },
       },
     };
   } catch (err: any) {

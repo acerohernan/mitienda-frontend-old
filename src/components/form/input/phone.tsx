@@ -42,7 +42,7 @@ const PhoneInput: React.FC<Props> = ({
   return (
     <div>
       {label ? (
-        <label className="text-sm mb-2 inline-block">{label}</label>
+        <label className="text-sm font-light mb-2 inline-block">{label}</label>
       ) : null}
       <div className="grid grid-cols-[110px_1fr] gap-1">
         <Select

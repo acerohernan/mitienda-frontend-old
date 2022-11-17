@@ -1,4 +1,7 @@
-import { UpdateStoreFormValues } from "../../api/tenant/types";
+import {
+  UpdateStoreFormValues,
+  UpdateStoreSocialFormValues,
+} from "../../api/tenant/types";
 
 export interface IAdminContext {
   actions: IAdminActions;
@@ -7,6 +10,7 @@ export interface IAdminContext {
 
 export interface IAdminActions {
   updateStore: (form: UpdateStoreFormValues) => Promise<void>;
+  updateStoreSocial: (form: UpdateStoreSocialFormValues) => Promise<void>;
 }
 
 export interface IAdminState {
@@ -42,4 +46,12 @@ export interface IStore {
   description: string | null;
   team_img: string | null;
   team_description: string | null;
+  social: {
+    facebook: string | null;
+    instagram: string | null;
+    pinterest: string | null;
+    twitter: string | null;
+    tiktok: string | null;
+    youtube: string | null;
+  };
 }

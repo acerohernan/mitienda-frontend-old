@@ -75,7 +75,7 @@ function AdminView() {
   }, []);
 
   return (
-    <div className="bg-gray-50 h-screen grid md:grid-cols-[1fr]">
+    <div className="bg-gray-100 h-screen grid md:grid-cols-[1fr]">
       <AdminNavbar views={VIEWS} selectedView={view} handleView={handleView} />
       <div className="">
         <AdminHeader />

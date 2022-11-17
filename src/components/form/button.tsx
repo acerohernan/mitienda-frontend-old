@@ -12,6 +12,7 @@ const Button: React.FC<Props> = ({ children, className, loading, submit }) => {
     <button
       className={`button  ${className} flex items-center justify-center`}
       type={submit ? "submit" : "button"}
+      disabled={loading}
     >
       {loading && <LoaderSpinner className="ml-2" />}
       <div className="inline-block mr-2">{children}</div>

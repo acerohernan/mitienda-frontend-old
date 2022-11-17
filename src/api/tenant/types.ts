@@ -23,3 +23,12 @@ export interface UpdateStoreFormValues {
   team_img?: string | null;
   team_description?: string | null;
 }
+
+export interface UpdateStoreSocialFormValues {
+  facebook?: string | null;
+  instagram?: string | null;
+  pinterest?: string | null;
+  twitter?: string | null;
+  tiktok?: string | null;
+  youtube?: string | null;
+}

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { API } from "../../api";
-import { UpdateStoreFormValues } from "../../api/tenant/types";
+import {
+  UpdateStoreFormValues,
+  UpdateStoreSocialFormValues,
+} from "../../api/tenant/types";
 import { getHttpError } from "../../utils/error";
 import { useToast } from "../../utils/toast";
 import {
@@ -35,16 +38,25 @@ export const AdminProvider: React.FC<Props> = ({
   async function updateStore(form: UpdateStoreFormValues) {
     setLoading(true);
     try {
-      API.tenant.updateStoreInformation(form);
+      await API.tenant.updateStoreInformation(form);
       toast.success("La tienda fue actualizada con éxito");
-      console.log(form);
     } catch (err) {
       toast.error(getHttpError(err));
     }
     setLoading(false);
   }
 
-  const actions: IAdminActions = { updateStore };
+  async function updateStoreSocial(form: UpdateStoreSocialFormValues) {
+    setLoading(true);
+    try {
+      await API.tenant.updateStoreSocial(form);
+      toast.success("Las redes sociales fueron editadas con éxito");
+    } catch (err) {
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
+  }
+  const actions: IAdminActions = { updateStore, updateStoreSocial };
   const state: IAdminState = { tenant, store, loading };
 
   return (
