@@ -7,7 +7,7 @@ import Button from "../../components/form/button";
 import Select, { Option } from "../../components/form/select";
 import { COUNTRIES } from "../../constants";
 import { useTenantContext } from "../../context/tenant";
-import { emailRegex, onlyNumbersRegex } from "../../utils/regex";
+import { emailRegex, onlyNumbersRegex, passwordRegex } from "../../utils/regex";
 
 function SignUpView() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,9 +19,12 @@ function SignUpView() {
           <span className="ml-2">({country.prefix})</span>
         </div>
       ),
-      value: country.code,
+      value: country.prefix,
     }));
   });
+  const [selectedPrefix, setSelectedPrefix] = useState<string>(
+    options[0].value
+  );
 
   const {
     actions: { signUp },
@@ -36,7 +39,18 @@ function SignUpView() {
   } = useForm<SignUpFormValues>();
 
   async function onSubmit(data: SignUpFormValues) {
-    console.log(data);
+    /* Set the phone with their prefix */
+    data.phone = `${selectedPrefix}${data.phone}`;
+
+    /* Set the country code to send to the server */
+    let country_code = COUNTRIES.find(
+      (country) => country.prefix === selectedPrefix
+    );
+
+    if (!country_code) country_code = COUNTRIES[0];
+
+    data.country_code = country_code.code;
+
     await signUp(data);
   }
 
@@ -44,8 +58,8 @@ function SignUpView() {
     setShowPassword(!showPassword);
   }
 
-  function handleCountryCode(code: string) {
-    setValue("country_code", code);
+  function handleCountryPrefix(prefix: string) {
+    setSelectedPrefix(prefix);
   }
 
   return (
@@ -78,6 +92,11 @@ function SignUpView() {
               type={showPassword ? "text" : "password"}
               {...register("password", {
                 required: "El campo es requerido",
+                pattern: {
+                  message:
+                    "La contraseña tiene que tener al menos una mayúscula, un número y 8 caracteres como mínimo",
+                  value: passwordRegex,
+                },
               })}
             />
 
@@ -100,7 +119,7 @@ function SignUpView() {
           <div className="grid grid-cols-[120px_1fr] gap-1 ">
             <Select
               options={options}
-              onChange={(option) => handleCountryCode(option.value)}
+              onChange={(option) => handleCountryPrefix(option.value)}
               className="p-3"
             />
             <div>

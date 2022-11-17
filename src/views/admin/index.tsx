@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineHome, AiTwotoneHome } from "react-icons/ai";
 import { BsFillNutFill, BsNut } from "react-icons/bs";
 import { FaRegUser, FaUser } from "react-icons/fa";
@@ -56,8 +56,23 @@ function AdminView() {
   const [view, setView] = useState<IAdminView>(VIEWS[0]);
 
   function handleView(view: IAdminView) {
-    return () => setView(view);
+    return () => {
+      setView(view);
+      localStorage.setItem("admin_view", JSON.stringify(view));
+    };
   }
+
+  useEffect(() => {
+    const savedView: any = localStorage.getItem("admin_view");
+
+    if (savedView) {
+      const viewToSet = VIEWS.find(
+        (view) => JSON.parse(savedView).label === view.label
+      );
+
+      if (viewToSet) setView(viewToSet as IAdminView);
+    }
+  }, []);
 
   return (
     <div className="bg-gray-50 h-screen grid md:grid-cols-[1fr]">

@@ -21,3 +21,33 @@ export const COUNTRIES = [
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/800px-Flag_of_the_United_States.svg.png",
   },
 ];
+
+export const CATEGORIES = [
+  {
+    name: "Supermercados y Mascotas",
+  },
+  {
+    name: "Ropa y calzado",
+  },
+  {
+    name: "Gaming",
+  },
+];
+
+export const CURRENCIES = [
+  {
+    name: "Sol Peruano",
+    code: "PEN",
+    symbol: "S/",
+  },
+  {
+    name: "Peso Argentino",
+    code: "PEN",
+    symbol: "$",
+  },
+  {
+    name: "Dólar estadounidense",
+    code: "USD",
+    symbol: "$",
+  },
+];

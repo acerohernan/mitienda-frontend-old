@@ -1,5 +1,9 @@
 import { BASE_URL, fecthData } from "..";
-import { LoginFormValues, SignUpFormValues } from "./types";
+import {
+  LoginFormValues,
+  SignUpFormValues,
+  UpdateStoreFormValues,
+} from "./types";
 
 export const signUp = (data: SignUpFormValues) =>
   fecthData.post(`${BASE_URL}/tenant/auth/signup`, data, {
@@ -32,3 +36,6 @@ export const getStoreInformation = (token: string) =>
       "Content-Type": "application/json",
     },
   });
+
+export const updateStoreInformation = (form: UpdateStoreFormValues) =>
+  fecthData.put(`/api/tenant/store/information`, form);

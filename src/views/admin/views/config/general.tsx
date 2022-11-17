@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
+import { UpdateStoreFormValues } from "../../../../api/tenant/types";
 import Button from "../../../../components/form/button";
 import PhoneInput from "../../../../components/form/input/phone";
 import TextInput from "../../../../components/form/input/text";
 import Select from "../../../../components/form/select";
+import { CATEGORIES } from "../../../../constants";
 import { useAdminContext } from "../../../../context/admin/hooks";
 import { onlyNumbersRegex } from "../../../../utils/regex";
-
-interface UpdateStoreFormValues {
-  name: string;
-  phone: string;
-  whatsapp: string;
-  category: string;
-}
 
 const AdminConfigGeneral: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -21,16 +16,17 @@ const AdminConfigGeneral: React.FC = () => {
   /* Form prefix */
   const [phonePrefix, setPhonePrefix] = useState("51");
   const [whatsappPrefix, setWhatsappPrefix] = useState("51");
+  const [category, setCategory] = useState<string>(CATEGORIES[0].name);
 
   const {
     state: { store },
+    actions: { updateStore },
   } = useAdminContext();
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<UpdateStoreFormValues>();
 
@@ -46,15 +42,18 @@ const AdminConfigGeneral: React.FC = () => {
     setWhatsappPrefix(whatsapp.prefix);
 
     setValue("whatsapp", whatsapp.phone);
-    setValue("phone", telephone.phone);
+    setValue("telephone", telephone.phone);
+
+    setCategory(store?.category || CATEGORIES[0].name);
   }, [store]);
 
-  function onSubmit(data: UpdateStoreFormValues) {
+  async function onSubmit(data: UpdateStoreFormValues) {
     /* Set the phone and whatsapp prefix */
-    data.phone = `${phonePrefix}${data.phone}`;
+    data.telephone = `${phonePrefix}${data.telephone}`;
     data.whatsapp = `${whatsappPrefix}${data.whatsapp}`;
 
     console.log(data);
+    await updateStore(data);
   }
 
   function handleOpen() {
@@ -125,11 +124,11 @@ const AdminConfigGeneral: React.FC = () => {
               onPrefixChange={(prefix) => setPhonePrefix(prefix)}
               className="text-sm"
               label="Teléfono"
-              error={errors.phone?.message}
+              error={errors.telephone?.message}
               selectedPrefix={phonePrefix}
               inputProps={{
                 placeholder: "999113934",
-                ...register("phone", {
+                ...register("telephone", {
                   required: "El campo es requerido",
                   pattern: {
                     value: onlyNumbersRegex,
@@ -160,22 +159,18 @@ const AdminConfigGeneral: React.FC = () => {
                 Rubro de la tienda
               </label>
               <Select
-                options={[
-                  {
-                    component: <span>Supermercados y Mascotas</span>,
-                    value: "Supermercados y Mascotas",
-                  },
-                  {
-                    component: <span>Ropa y calzado</span>,
-                    value: "Ropa y calzado",
-                  },
-                  {
-                    component: <span>Gaming</span>,
-                    value: "Gaming",
-                  },
-                ]}
+                options={CATEGORIES.map((category) => {
+                  return {
+                    component: <span>{category.name}</span>,
+                    value: category.name,
+                  };
+                })}
                 onChange={(option) => {
                   setValue("category", option.value);
+                }}
+                defaultOption={{
+                  component: <span>{category}</span>,
+                  value: category,
                 }}
                 className="p-3 text-sm"
               />

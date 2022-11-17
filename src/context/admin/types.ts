@@ -1,13 +1,18 @@
+import { UpdateStoreFormValues } from "../../api/tenant/types";
+
 export interface IAdminContext {
   actions: IAdminActions;
   state: IAdminState;
 }
 
-export interface IAdminActions {}
+export interface IAdminActions {
+  updateStore: (form: UpdateStoreFormValues) => Promise<void>;
+}
 
 export interface IAdminState {
   tenant: ITenant | null;
   store: IStore | null;
+  loading: boolean;
 }
 
 export interface ITenant {

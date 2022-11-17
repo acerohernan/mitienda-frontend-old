@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { API } from "../../api";
+import { UpdateStoreFormValues } from "../../api/tenant/types";
+import { getHttpError } from "../../utils/error";
+import { useToast } from "../../utils/toast";
 import {
   IAdminActions,
   IAdminContext,
@@ -26,8 +30,22 @@ export const AdminProvider: React.FC<Props> = ({
   const [store, setStore] = useState<IStore | null>(storeInitial);
   const [loading, setLoading] = useState(false);
 
-  const actions: IAdminActions = {};
-  const state: IAdminState = { tenant, store };
+  const toast = useToast();
+
+  async function updateStore(form: UpdateStoreFormValues) {
+    setLoading(true);
+    try {
+      API.tenant.updateStoreInformation(form);
+      toast.success("La tienda fue actualizada con éxito");
+      console.log(form);
+    } catch (err) {
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
+  }
+
+  const actions: IAdminActions = { updateStore };
+  const state: IAdminState = { tenant, store, loading };
 
   return (
     <AdminContext.Provider value={{ actions, state }}>
