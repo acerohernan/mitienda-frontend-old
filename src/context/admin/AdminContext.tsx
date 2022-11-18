@@ -56,7 +56,25 @@ export const AdminProvider: React.FC<Props> = ({
     }
     setLoading(false);
   }
-  const actions: IAdminActions = { updateStore, updateStoreSocial };
+
+  async function uploadImage(file: File) {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("img", file);
+      const response = await API.tenant.uploadImage(formData);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
+  }
+  const actions: IAdminActions = {
+    updateStore,
+    updateStoreSocial,
+    uploadImage,
+  };
   const state: IAdminState = { tenant, store, loading };
 
   return (

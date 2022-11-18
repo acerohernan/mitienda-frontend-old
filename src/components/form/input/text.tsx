@@ -4,6 +4,7 @@ interface Props {
   error?: string;
   inputProps?: Object;
   prefixComponent?: JSX.Element | JSX.Element[];
+  textarea?: boolean;
 }
 
 const TextInput: React.FC<Props> = ({
@@ -12,6 +13,7 @@ const TextInput: React.FC<Props> = ({
   className,
   inputProps,
   prefixComponent,
+  textarea,
 }) => {
   return (
     <div>
@@ -20,7 +22,11 @@ const TextInput: React.FC<Props> = ({
       ) : null}
       <div className="flex items-center">
         {prefixComponent ? prefixComponent : null}
-        <input className={`input ${className}`} {...inputProps} />
+        {textarea ? (
+          <textarea className={`input ${className}`} {...inputProps} />
+        ) : (
+          <input className={`input ${className}`} {...inputProps} />
+        )}
       </div>
       {error ? <span className="input-err-msg text-sm">{error}</span> : null}
     </div>

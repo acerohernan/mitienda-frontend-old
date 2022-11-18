@@ -11,6 +11,7 @@ export interface IAdminContext {
 export interface IAdminActions {
   updateStore: (form: UpdateStoreFormValues) => Promise<void>;
   updateStoreSocial: (form: UpdateStoreSocialFormValues) => Promise<void>;
+  uploadImage: (file: File) => Promise<void>;
 }
 
 export interface IAdminState {

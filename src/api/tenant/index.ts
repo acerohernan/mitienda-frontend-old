@@ -51,3 +51,10 @@ export const updateStoreInformation = (form: UpdateStoreFormValues) =>
 
 export const updateStoreSocial = (form: UpdateStoreSocialFormValues) =>
   fecthData.put(`/api/tenant/store/social`, form);
+
+export const uploadImage = (form: FormData) =>
+  fecthData.post(`/api/tenant/upload/image`, form, {
+    headers: {
+      "Content-Type": "multipart/formdata",
+    },
+  });
