@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { AiOutlineHome, AiTwotoneHome } from "react-icons/ai";
 import { BsFillNutFill, BsNut } from "react-icons/bs";
 import { FaRegUser, FaUser } from "react-icons/fa";
@@ -47,6 +48,8 @@ const NavBarItems: Array<INavItem> = [
 ];
 
 const AdminNavbar: React.FC = () => {
+  const { pathname } = useRouter();
+
   return (
     <>
       <MobileNavbar items={NavBarItems} />
@@ -58,7 +61,7 @@ const AdminNavbar: React.FC = () => {
           {NavBarItems.map((item, index) => (
             <NavBarItem
               key={index}
-              active={false}
+              active={pathname === item.path}
               label={item.label}
               icon={item.icon}
               activeIcon={item.activeIcon}

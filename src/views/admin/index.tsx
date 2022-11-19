@@ -82,7 +82,7 @@ function AdminView() {
 
   return (
     <div className="bg-gray-100 h-screen grid md:grid-cols-[1fr]">
-      <AdminNavbar views={VIEWS} selectedView={view} handleView={handleView} />
+      <AdminNavbar />
       <div className="">
         <AdminHeader />
         <div className="mt-16 md:ml-72 mb-16 md:mb-0">{view.component}</div>

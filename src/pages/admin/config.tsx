@@ -7,7 +7,8 @@ import {
   removeTokenInServerSide,
   withAuthentication,
 } from "../../utils/server/ssr";
-import AdminView from "../../views/admin";
+import AdminLayout from "../../views/admin/components/layout";
+import AdminConfig from "../../views/admin/views/config";
 
 function StoreAdmin({
   store,
@@ -15,7 +16,9 @@ function StoreAdmin({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AdminProvider store={store} tenant={tenant}>
-      <AdminView />
+      <AdminLayout>
+        <AdminConfig />
+      </AdminLayout>
     </AdminProvider>
   );
 }

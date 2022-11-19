@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { INavItem } from ".";
 
 interface Props {
@@ -6,11 +7,13 @@ interface Props {
 }
 
 const MobileNavbar: React.FC<Props> = ({ items }) => {
+  const { pathname } = useRouter();
+
   return (
     <div className="grid grid-cols-5 items-center justify-evenly bg-white md:hidden w-full fixed border bottom-0 z-10">
       {items.map((item, index) => (
         <MobileNavBarItem
-          active={false}
+          active={pathname === item.path}
           activeIcon={item.activeIcon}
           icon={item.icon}
           path={item.path}
