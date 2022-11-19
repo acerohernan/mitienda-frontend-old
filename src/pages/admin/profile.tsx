@@ -7,19 +7,19 @@ import {
   withAuthentication,
 } from "../../utils/server/ssr";
 import AdminLayout from "../../views/admin/components/layout";
-import AdminProfile from "../../views/admin/views/profile";
+import AdminProfileView from "../../views/admin/views/profile";
 
-function StoreAdmin({
+function AdminProfile({
   tenant,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AdminLayout>
-      <AdminProfile tenant={tenant} />
+      <AdminProfileView tenant={tenant} />
     </AdminLayout>
   );
 }
 
-export default StoreAdmin;
+export default AdminProfile;
 
 export const getServerSideProps = withAuthentication<{ tenant: ITenant }>(
   async (context) => {

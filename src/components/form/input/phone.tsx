@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { COUNTRIES } from "../../../constants";
+import { COUNTRIES, PrefixNumber } from "../../../constants";
 import Select, { Option } from "../select";
 
 interface Props {
@@ -7,8 +7,8 @@ interface Props {
   label?: string;
   error?: string;
   inputProps?: Object;
-  selectedPrefix: string;
-  onPrefixChange: (prefix: string) => void;
+  selectedPrefix: PrefixNumber;
+  onPrefixChange: (prefix: PrefixNumber) => void;
 }
 
 const PhoneInput: React.FC<Props> = ({

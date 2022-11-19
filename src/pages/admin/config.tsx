@@ -7,19 +7,19 @@ import {
   withAuthentication,
 } from "../../utils/server/ssr";
 import AdminLayout from "../../views/admin/components/layout";
-import AdminConfig from "../../views/admin/views/config";
+import AdminConfigView from "../../views/admin/views/config";
 
-function StoreAdmin({
+function AdminConfig({
   store,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AdminLayout>
-      <AdminConfig store={store} />
+      <AdminConfigView store={store} />
     </AdminLayout>
   );
 }
 
-export default StoreAdmin;
+export default AdminConfig;
 
 export const getServerSideProps = withAuthentication<{
   store: IStore;

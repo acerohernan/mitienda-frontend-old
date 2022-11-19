@@ -2,6 +2,7 @@ import { BASE_URL, fecthData } from "..";
 import {
   LoginFormValues,
   SignUpFormValues,
+  UpdateInformationFormValues,
   UpdateStoreFormValues,
   UpdateStoreSocialFormValues,
 } from "./types";
@@ -24,6 +25,17 @@ export const logout = () => fecthData.delete(`/api/tenant/auth/logout`);
 
 export const getInformation = (token: string) =>
   fecthData.get(`${BASE_URL}/tenant/information`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+export const updateInformation = (
+  form: UpdateInformationFormValues,
+  token: string
+) =>
+  fecthData.put(`${BASE_URL}/tenant/information`, form, {
     headers: {
       authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

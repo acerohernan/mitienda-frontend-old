@@ -4,22 +4,22 @@ import {
   withAuthentication,
 } from "../../utils/server/ssr";
 import AdminLayout from "../../views/admin/components/layout";
-import AdminOrdersView from "../../views/admin/views/orders";
+import AdminPricesView from "../../views/admin/views/prices";
 
-function AdminOrders() {
+function AdminPrices() {
   return (
     <AdminLayout>
-      <AdminOrdersView />
+      <AdminPricesView />
     </AdminLayout>
   );
 }
 
-export default AdminOrders;
+export default AdminPrices;
 //Latest view
 {
   /* <AdminProvider store={store} tenant={tenant}>
-        <AdminView />
-      </AdminProvider> */
+          <AdminView />
+        </AdminProvider> */
 }
 
 export const getServerSideProps = withAuthentication(async (context) => {

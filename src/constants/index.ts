@@ -1,3 +1,9 @@
+export enum PrefixNumber {
+  PE = "51",
+  AR = "54",
+  US = "1",
+}
+
 export const COUNTRIES = [
   {
     code: "PE",

@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ContextProvider>
       <Toaster />
-      <NextNProgress color="#6b21a8" />
+      <NextNProgress color="#6b21a8" options={{ showSpinner: false }} />
       <Component {...pageProps} />
     </ContextProvider>
   );

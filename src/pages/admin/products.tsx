@@ -4,17 +4,17 @@ import {
   withAuthentication,
 } from "../../utils/server/ssr";
 import AdminLayout from "../../views/admin/components/layout";
-import AdminProducts from "../../views/admin/views/products";
+import AdminProductsView from "../../views/admin/views/products";
 
-function StoreAdmin() {
+function AdminProducts() {
   return (
     <AdminLayout>
-      <AdminProducts />
+      <AdminProductsView />
     </AdminLayout>
   );
 }
 
-export default StoreAdmin;
+export default AdminProducts;
 //Latest view
 {
   /* <AdminProvider store={store} tenant={tenant}>

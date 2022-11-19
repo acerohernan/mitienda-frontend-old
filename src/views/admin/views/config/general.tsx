@@ -8,9 +8,10 @@ import Button from "../../../../components/form/button";
 import PhoneInput from "../../../../components/form/input/phone";
 import TextInput from "../../../../components/form/input/text";
 import Select from "../../../../components/form/select";
-import { CATEGORIES } from "../../../../constants";
+import { CATEGORIES, PrefixNumber } from "../../../../constants";
 import { IStore } from "../../../../context/admin/types";
 import { getHttpError } from "../../../../utils/error";
+import { getPrefixFromNumber } from "../../../../utils/phone";
 import { onlyNumbersRegex } from "../../../../utils/regex";
 import { useToast } from "../../../../utils/toast";
 
@@ -23,14 +24,12 @@ const AdminConfigGeneral: React.FC<Props> = ({ store }) => {
   const [loading, setLoading] = useState(false);
 
   /* Form prefix */
-  const [phonePrefix, setPhonePrefix] = useState<string>(() => {
-    const { prefix } = getPrefixAndPhoneNumber(store?.telephone);
-    return prefix;
-  });
-  const [whatsappPrefix, setWhatsappPrefix] = useState<string>(() => {
-    const { prefix } = getPrefixAndPhoneNumber(store?.whatsapp);
-    return prefix;
-  });
+  const [phonePrefix, setPhonePrefix] = useState<PrefixNumber>(() =>
+    getPrefixFromNumber(store.telephone)
+  );
+  const [whatsappPrefix, setWhatsappPrefix] = useState<PrefixNumber>(() =>
+    getPrefixFromNumber(store.whatsapp)
+  );
   const [category, setCategory] = useState<string>(store.category);
 
   const {
@@ -46,11 +45,11 @@ const AdminConfigGeneral: React.FC<Props> = ({ store }) => {
     setValue("category", store?.category);
 
     /* Phone */
-    const telephone = getPrefixAndPhoneNumber(store?.telephone);
-    const whatsapp = getPrefixAndPhoneNumber(store?.whatsapp);
+    const telephonePrefix = getPrefixFromNumber(store?.telephone);
+    const whatsappPrefix = getPrefixFromNumber(store?.whatsapp);
 
-    setValue("whatsapp", whatsapp.phone);
-    setValue("telephone", telephone.phone);
+    setValue("whatsapp", store.whatsapp.replace(whatsappPrefix, ""));
+    setValue("telephone", store.telephone.replace(telephonePrefix, ""));
   }, []);
 
   async function onSubmit(data: UpdateStoreFormValues) {
