@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
+import { API } from "../../../../api";
 import { UpdateStoreSocialFormValues } from "../../../../api/tenant/types";
 import Button from "../../../../components/form/button";
 import TextInput from "../../../../components/form/input/text";
-import { useAdminContext } from "../../../../context/admin/hooks";
+import { IStore } from "../../../../context/admin/types";
+import { getHttpError } from "../../../../utils/error";
+import { useToast } from "../../../../utils/toast";
 
-const AdminConfigSocial: React.FC = () => {
+interface Props {
+  store: IStore;
+}
+
+const AdminConfigSocial: React.FC<Props> = ({ store }) => {
   const [open, setOpen] = useState(true);
-
-  const {
-    state: { store, loading },
-    actions: { updateStoreSocial },
-  } = useAdminContext();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -21,24 +25,23 @@ const AdminConfigSocial: React.FC = () => {
     formState: { errors },
   } = useForm<UpdateStoreSocialFormValues>();
 
+  const toast = useToast();
+
   async function onSubmit(data: UpdateStoreSocialFormValues) {
     await updateStoreSocial(data);
   }
 
-  useEffect(() => {
-    if (!store) return;
-
-    const {
-      social: { facebook, instagram, pinterest, tiktok, twitter, youtube },
-    } = store;
-
-    setValue("facebook", facebook);
-    setValue("instagram", instagram);
-    setValue("pinterest", pinterest);
-    setValue("tiktok", tiktok);
-    setValue("twitter", twitter);
-    setValue("youtube", youtube);
-  }, [store]);
+  async function updateStoreSocial(data: UpdateStoreSocialFormValues) {
+    setLoading(true);
+    try {
+      const token = Cookies.get("token") || "";
+      await API.tenant.updateStoreSocial(data, token);
+      toast.success("Redes sociales actualizadas con éxito");
+    } catch (err) {
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
+  }
 
   function handleOpen() {
     setOpen(!open);
@@ -72,7 +75,9 @@ const AdminConfigSocial: React.FC = () => {
                 }
                 error={errors.facebook?.message}
                 inputProps={{
-                  ...register("facebook", {}),
+                  ...register("facebook", {
+                    value: store.social.facebook,
+                  }),
                 }}
               />
             </div>
@@ -86,7 +91,9 @@ const AdminConfigSocial: React.FC = () => {
                 </span>
               }
               inputProps={{
-                ...register("instagram", {}),
+                ...register("instagram", {
+                  value: store.social.instagram,
+                }),
               }}
             />
             <TextInput
@@ -99,7 +106,9 @@ const AdminConfigSocial: React.FC = () => {
                 </span>
               }
               inputProps={{
-                ...register("pinterest", {}),
+                ...register("pinterest", {
+                  value: store.social.pinterest,
+                }),
               }}
             />
             <TextInput
@@ -112,7 +121,9 @@ const AdminConfigSocial: React.FC = () => {
                 </span>
               }
               inputProps={{
-                ...register("twitter", {}),
+                ...register("twitter", {
+                  value: store.social.twitter,
+                }),
               }}
             />
             <TextInput
@@ -125,7 +136,9 @@ const AdminConfigSocial: React.FC = () => {
                 </span>
               }
               inputProps={{
-                ...register("tiktok", {}),
+                ...register("tiktok", {
+                  value: store.social.tiktok,
+                }),
               }}
             />
             <TextInput
@@ -138,7 +151,9 @@ const AdminConfigSocial: React.FC = () => {
                 </span>
               }
               inputProps={{
-                ...register("youtube", {}),
+                ...register("youtube", {
+                  value: store.social.youtube,
+                }),
               }}
             />
           </div>

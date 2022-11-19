@@ -1,68 +1,102 @@
+import Cookies from "js-cookie";
 import Image from "next/image";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { RefObject, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
 import { SlCloudUpload } from "react-icons/sl";
 import { TiDeleteOutline } from "react-icons/ti";
+import { API } from "../../../../api";
 import { UpdateStoreFormValues } from "../../../../api/tenant/types";
 import Button from "../../../../components/form/button";
 import TextInput from "../../../../components/form/input/text";
-import { useAdminContext } from "../../../../context/admin/hooks";
+import { IStore } from "../../../../context/admin/types";
+import { getHttpError } from "../../../../utils/error";
+import { useToast } from "../../../../utils/toast";
 
-const AdminConfigDesign: React.FC = () => {
+interface Props {
+  store: IStore;
+}
+
+const AdminConfigDesign: React.FC<Props> = ({ store }) => {
   const [open, setOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const {
-    state: { store, loading },
-    actions: { updateStoreSocial, uploadImage },
-  } = useAdminContext();
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<UpdateStoreFormValues>();
+  const { register, handleSubmit } = useForm<UpdateStoreFormValues>();
 
   const [logo, setLogo] = useState<File | null>(null);
   const [banner, setBanner] = useState<File | null>(null);
-  useEffect(() => {
-    setValue("logo_img", store?.logo_img);
-    setValue("banner_img", store?.banner_img);
-    setValue("description", store?.description);
-  }, [store]);
+  const [bannerUrl, setBannerUrl] = useState<string | null>(store.banner_img);
+  const [logoUrl, setLogoUrl] = useState<string | null>(store.logo_img);
+
+  const toast = useToast();
 
   async function onSubmit(data: UpdateStoreFormValues) {
+    if (!logo && !logoUrl) data.logo_img = null;
+
+    if (!banner && !bannerUrl) data.banner_img = null;
+
     if (logo) {
-      await uploadImage(logo);
+      const url = await uploadImage(logo);
+      if (url) data.logo_img = url;
     }
 
     if (banner) {
-      console.log("Subir banner", banner);
+      const url = await uploadImage(banner);
+      if (url) data.banner_img = url;
     }
 
-    console.log(data);
+    await updateStoreInformation(data);
   }
 
-  function handleOpen() {
-    setOpen(!open);
+  async function uploadImage(file: File): Promise<string | null> {
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("img", file);
+
+    const token = Cookies.get("token") || "";
+
+    try {
+      const response = await API.tenant.uploadImage(formData, token);
+      setLoading(false);
+      return response.data.url;
+    } catch (err) {
+      toast.error(getHttpError(err));
+      setLoading(false);
+      return null;
+    }
   }
 
-  function handleLogoFile(file: File | null) {
-    console.log("logo", file);
+  async function updateStoreInformation(
+    data: UpdateStoreFormValues
+  ): Promise<void> {
+    setLoading(true);
+    const token = Cookies.get("token") || "";
+
+    try {
+      await API.tenant.updateStoreInformation(data, token);
+      toast.success("Diseño de tienda actualizado");
+    } catch (err) {
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
+  }
+
+  function handleLogoImg(file: File | null, fileUrl: string | null) {
     setLogo(file);
+    setLogoUrl(fileUrl);
   }
 
-  function handleBannerFile(file: File | null) {
-    console.log("banner", file);
+  function handleBannerImg(file: File | null, fileUrl: string | null) {
     setBanner(file);
+    setBannerUrl(fileUrl);
   }
 
   return (
     <div className="bg-white w-full shadow-sm border border-gray-200 rounded-xl p-6">
       <div
         className=" text-start text-lg font-ligth flex items-center justify-between cursor-pointer"
-        onClick={handleOpen}
+        onClick={() => setOpen(!open)}
       >
         Diseño
         {open ? (
@@ -79,7 +113,8 @@ const AdminConfigDesign: React.FC = () => {
               id="logo"
               label="Logo"
               secondLabel="Sube tu el logo de tu tienda"
-              onChange={handleLogoFile}
+              value={store.logo_img}
+              onChange={handleLogoImg}
             />
             <FileInput
               id="banner"
@@ -88,7 +123,8 @@ const AdminConfigDesign: React.FC = () => {
               imgWidth={100}
               imgHeight={30}
               imgClassName="h-28"
-              onChange={handleBannerFile}
+              value={store.banner_img}
+              onChange={handleBannerImg}
             />
             <TextInput
               textarea
@@ -96,7 +132,9 @@ const AdminConfigDesign: React.FC = () => {
               className="text-sm"
               inputProps={{
                 rows: 4,
-                ...register("description"),
+                ...register("description", {
+                  value: store.description,
+                }),
               }}
             />
           </div>
@@ -115,7 +153,8 @@ interface FileInputProps {
   imgWidth?: number;
   imgHeight?: number;
   imgClassName?: string;
-  onChange: (file: File | null) => void;
+  value?: string | null;
+  onChange: (file: File | null, fileUrl: string | null) => void;
   id: string;
 }
 const FileInput: React.FC<FileInputProps> = ({
@@ -125,9 +164,14 @@ const FileInput: React.FC<FileInputProps> = ({
   imgWidth,
   id,
   imgClassName,
+  value,
   onChange,
 }) => {
-  const [filePath, setFilePath] = useState("");
+  const [filePath, setFilePath] = useState<string | null>(() => {
+    if (value) return value;
+
+    return null;
+  });
 
   const inputRef: RefObject<any> = useRef(null);
 
@@ -135,17 +179,16 @@ const FileInput: React.FC<FileInputProps> = ({
     const file = event.currentTarget?.files && event.currentTarget?.files[0];
 
     if (file) {
-      setFilePath(URL.createObjectURL(file));
-      onChange(file);
+      const url = URL.createObjectURL(file);
+      setFilePath(url);
+      onChange(file, url);
     }
   };
 
   function handleDelete() {
-    if (inputRef.current?.value) {
-      inputRef.current.value = "";
-      setFilePath("");
-      onChange(null);
-    }
+    inputRef.current.value = "";
+    setFilePath(null);
+    onChange(null, null);
   }
 
   return (
@@ -179,7 +222,11 @@ const FileInput: React.FC<FileInputProps> = ({
       {filePath ? (
         <div className="p-3 border-gray-200 border rounded-lg">
           <div className="relative">
-            <button className="absolute right-0" onClick={handleDelete}>
+            <button
+              type="button"
+              className="absolute right-0"
+              onClick={handleDelete}
+            >
               <TiDeleteOutline className="w-9 h-9 text-gray-500" />
             </button>
 

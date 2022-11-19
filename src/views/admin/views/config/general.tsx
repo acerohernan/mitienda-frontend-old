@@ -1,27 +1,37 @@
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CgChevronDown, CgChevronUp } from "react-icons/cg";
+import { API } from "../../../../api";
 import { UpdateStoreFormValues } from "../../../../api/tenant/types";
 import Button from "../../../../components/form/button";
 import PhoneInput from "../../../../components/form/input/phone";
 import TextInput from "../../../../components/form/input/text";
 import Select from "../../../../components/form/select";
 import { CATEGORIES } from "../../../../constants";
-import { useAdminContext } from "../../../../context/admin/hooks";
+import { IStore } from "../../../../context/admin/types";
+import { getHttpError } from "../../../../utils/error";
 import { onlyNumbersRegex } from "../../../../utils/regex";
+import { useToast } from "../../../../utils/toast";
 
-const AdminConfigGeneral: React.FC = () => {
+interface Props {
+  store: IStore;
+}
+
+const AdminConfigGeneral: React.FC<Props> = ({ store }) => {
   const [open, setOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   /* Form prefix */
-  const [phonePrefix, setPhonePrefix] = useState("51");
-  const [whatsappPrefix, setWhatsappPrefix] = useState("51");
-  const [category, setCategory] = useState<string>(CATEGORIES[0].name);
-
-  const {
-    state: { store, loading },
-    actions: { updateStore },
-  } = useAdminContext();
+  const [phonePrefix, setPhonePrefix] = useState<string>(() => {
+    const { prefix } = getPrefixAndPhoneNumber(store?.telephone);
+    return prefix;
+  });
+  const [whatsappPrefix, setWhatsappPrefix] = useState<string>(() => {
+    const { prefix } = getPrefixAndPhoneNumber(store?.whatsapp);
+    return prefix;
+  });
+  const [category, setCategory] = useState<string>(store.category);
 
   const {
     register,
@@ -30,30 +40,37 @@ const AdminConfigGeneral: React.FC = () => {
     formState: { errors },
   } = useForm<UpdateStoreFormValues>();
 
+  const toast = useToast();
+
   useEffect(() => {
-    setValue("name", store?.name || "");
-    setValue("category", store?.category || "");
+    setValue("category", store?.category);
 
     /* Phone */
     const telephone = getPrefixAndPhoneNumber(store?.telephone);
     const whatsapp = getPrefixAndPhoneNumber(store?.whatsapp);
 
-    setPhonePrefix(telephone.prefix);
-    setWhatsappPrefix(whatsapp.prefix);
-
     setValue("whatsapp", whatsapp.phone);
     setValue("telephone", telephone.phone);
-
-    setCategory(store?.category || CATEGORIES[0].name);
-  }, [store]);
+  }, []);
 
   async function onSubmit(data: UpdateStoreFormValues) {
     /* Set the phone and whatsapp prefix */
     data.telephone = `${phonePrefix}${data.telephone}`;
     data.whatsapp = `${whatsappPrefix}${data.whatsapp}`;
 
-    console.log(data);
     await updateStore(data);
+  }
+
+  async function updateStore(data: UpdateStoreFormValues) {
+    setLoading(true);
+    try {
+      const token = Cookies.get("token") || "";
+      await API.tenant.updateStoreInformation(data, token);
+      toast.success("Información actualizada con éxito");
+    } catch (err) {
+      toast.error(getHttpError(err));
+    }
+    setLoading(false);
   }
 
   function handleOpen() {
@@ -112,6 +129,7 @@ const AdminConfigGeneral: React.FC = () => {
                 placeholder: "Tienda oficial",
                 ...register("name", {
                   required: "El campo es requerido",
+                  value: store.name,
                   minLength: {
                     value: 6,
                     message:
