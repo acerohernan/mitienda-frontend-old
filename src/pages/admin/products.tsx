@@ -24,7 +24,6 @@ export default StoreAdmin;
 
 export const getServerSideProps = withAuthentication(async (context) => {
   const token = getTokenInServerSide(context);
-  console.log(token);
 
   try {
     return {

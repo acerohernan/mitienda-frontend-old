@@ -10,6 +10,12 @@ export interface SignUpFormValues {
   country_code: string;
 }
 
+export interface UpdateInformationFormValues {
+  phone?: string;
+  name?: string;
+  surname?: string;
+}
+
 export interface UpdateStoreFormValues {
   name?: string;
   whatsapp?: string;

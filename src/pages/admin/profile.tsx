@@ -1,3 +1,6 @@
+import { InferGetServerSidePropsType } from "next";
+import { API } from "../../api";
+import { ITenant } from "../../context/admin/types";
 import {
   getTokenInServerSide,
   removeTokenInServerSide,
@@ -6,38 +9,38 @@ import {
 import AdminLayout from "../../views/admin/components/layout";
 import AdminProfile from "../../views/admin/views/profile";
 
-function StoreAdmin() {
+function StoreAdmin({
+  tenant,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AdminLayout>
-      <AdminProfile />
+      <AdminProfile tenant={tenant} />
     </AdminLayout>
   );
 }
 
 export default StoreAdmin;
-//Latest view
-{
-  /* <AdminProvider store={store} tenant={tenant}>
-        <AdminView />
-      </AdminProvider> */
-}
 
-export const getServerSideProps = withAuthentication(async (context) => {
-  const token = getTokenInServerSide(context);
-  console.log(token);
+export const getServerSideProps = withAuthentication<{ tenant: ITenant }>(
+  async (context) => {
+    const token = getTokenInServerSide(context);
 
-  try {
-    return {
-      props: {},
-    };
-  } catch (err: any) {
-    console.log(err.message);
-    removeTokenInServerSide(context);
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
+    try {
+      const response = await API.tenant.getInformation(token);
+      return {
+        props: {
+          tenant: response.data.tenant,
+        },
+      };
+    } catch (err: any) {
+      console.log(err.message);
+      removeTokenInServerSide(context);
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
   }
-});
+);
