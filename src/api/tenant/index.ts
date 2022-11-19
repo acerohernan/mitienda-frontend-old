@@ -1,6 +1,8 @@
 import { BASE_URL, fecthData } from "..";
 import {
+  ForgotPasswordFormValues,
   LoginFormValues,
+  RestorePasswordFormValues,
   SignUpFormValues,
   UpdateInformationFormValues,
   UpdateStoreFormValues,
@@ -22,6 +24,15 @@ export const login = (data: LoginFormValues) =>
   });
 
 export const logout = () => fecthData.delete(`/api/tenant/auth/logout`);
+
+export const forgotPassword = (data: ForgotPasswordFormValues) =>
+  fecthData.post(`${BASE_URL}/tenant/auth/password/forgot`, data);
+
+export const checkForgotPasswordCode = (code: string) =>
+  fecthData.get(`${BASE_URL}/tenant/auth/password/verify-code/${code}`);
+
+export const restorePassword = (data: RestorePasswordFormValues) =>
+  fecthData.post(`${BASE_URL}/tenant/auth/password/restore`, data);
 
 export const getInformation = (token: string) =>
   fecthData.get(`${BASE_URL}/tenant/information`, {

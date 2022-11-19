@@ -10,6 +10,16 @@ export interface SignUpFormValues {
   country_code: string;
 }
 
+export interface ForgotPasswordFormValues {
+  email: string;
+}
+
+export interface RestorePasswordFormValues {
+  code: string;
+  password: string;
+  re_password: string;
+}
+
 export interface UpdateInformationFormValues {
   phone?: string;
   name?: string;
