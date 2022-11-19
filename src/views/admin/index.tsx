@@ -17,6 +17,7 @@ export interface IAdminView {
   icon: JSX.Element;
   activeIcon: JSX.Element;
   component: JSX.Element;
+  path: string;
 }
 
 const VIEWS: Array<IAdminView> = [
@@ -25,30 +26,35 @@ const VIEWS: Array<IAdminView> = [
     component: <AdminHome />,
     icon: <AiOutlineHome className="w-6 h-6" />,
     activeIcon: <AiTwotoneHome className="w-6 h-6" />,
+    path: "/admin",
   },
   {
     label: "Mis Pedidos",
     component: <AdminOrders />,
     icon: <MdOutlineDeliveryDining className="w-6 h-6" />,
     activeIcon: <MdDeliveryDining className="w-6 h-6" />,
+    path: "/admin/orders",
   },
   {
     label: "Mis productos",
     component: <AdminProducts />,
     icon: <HiOutlineShoppingBag className="w-6 h-6" />,
     activeIcon: <HiShoppingBag className="w-6 h-6" />,
+    path: "/admin/products",
   },
   {
     label: "Configuración",
     component: <AdminConfig />,
     icon: <BsNut className="w-6 h-6" />,
     activeIcon: <BsFillNutFill className="w-6 h-6" />,
+    path: "/admin/config",
   },
   {
     label: "Profile",
     component: <AdminProfile />,
     icon: <FaRegUser className="w-6 h-6" />,
     activeIcon: <FaUser className="w-6 h-6" />,
+    path: "/admin/profile",
   },
 ];
 

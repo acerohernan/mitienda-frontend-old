@@ -1,70 +1,68 @@
+import Link from "next/link";
 import { AiOutlineHome, AiTwotoneHome } from "react-icons/ai";
 import { BsFillNutFill, BsNut } from "react-icons/bs";
+import { FaRegUser, FaUser } from "react-icons/fa";
 import { HiOutlineShoppingBag, HiShoppingBag } from "react-icons/hi";
 import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
-import { IAdminView } from "../..";
 import MobileNavbar from "./mobile";
 
 export interface INavItem {
   label: string;
   icon: JSX.Element;
   activeIcon: JSX.Element;
+  path: string;
 }
 
-const ITEMS: Array<INavItem> = [
+const NavBarItems: Array<INavItem> = [
   {
     label: "Inicio",
     icon: <AiOutlineHome className="w-6 h-6" />,
     activeIcon: <AiTwotoneHome className="w-6 h-6" />,
+    path: "/admin",
   },
   {
     label: "Mis Pedidos",
     icon: <MdOutlineDeliveryDining className="w-6 h-6" />,
     activeIcon: <MdDeliveryDining className="w-6 h-6" />,
+    path: "/admin/orders",
   },
   {
     label: "Mis productos",
     icon: <HiOutlineShoppingBag className="w-6 h-6" />,
     activeIcon: <HiShoppingBag className="w-6 h-6" />,
+    path: "/admin/products",
   },
   {
     label: "Configuración",
     icon: <BsNut className="w-6 h-6" />,
     activeIcon: <BsFillNutFill className="w-6 h-6" />,
+    path: "/admin/config",
+  },
+  {
+    label: "Profile",
+    icon: <FaRegUser className="w-6 h-6" />,
+    activeIcon: <FaUser className="w-6 h-6" />,
+    path: "/admin/profile",
   },
 ];
 
-interface AdminNavBarProps {
-  views: Array<IAdminView>;
-  selectedView: IAdminView;
-  handleView: (view: IAdminView) => () => void;
-}
-
-const AdminNavbar: React.FC<AdminNavBarProps> = ({
-  views,
-  handleView,
-  selectedView,
-}) => {
+const AdminNavbar: React.FC = () => {
   return (
     <>
-      <MobileNavbar
-        views={views}
-        selected={selectedView}
-        handleSelect={handleView}
-      />
+      <MobileNavbar items={NavBarItems} />
       <div className="hidden md:grid h-screen grid-rows-[64px_1fr_220px] bg-white fixed w-72 z-10">
         <div className="flex items-center px-8">
           <h1 className="text-3xl font-light">MiTienda</h1>
         </div>
         <div className="p-4 pt-0 border-r border-gray-200">
-          {views.map((view, index) => (
+          {NavBarItems.map((item, index) => (
             <NavBarItem
               key={index}
-              active={selectedView.label === view.label}
-              onClick={handleView(view)}
-              label={view.label}
-              icon={view.icon}
-              activeIcon={view.activeIcon}
+              active={false}
+              label={item.label}
+              icon={item.icon}
+              activeIcon={item.activeIcon}
+              path={item.path}
             />
           ))}
         </div>
@@ -91,7 +89,7 @@ interface NavBarItemProps {
   icon: JSX.Element;
   activeIcon: JSX.Element;
   active?: boolean;
-  onClick: () => void;
+  path: string;
 }
 
 const NavBarItem: React.FC<NavBarItemProps> = ({
@@ -99,20 +97,20 @@ const NavBarItem: React.FC<NavBarItemProps> = ({
   icon,
   label,
   active,
-  onClick,
+  path,
 }) => {
   return (
-    <button
-      className={`py-5 px-6 hover:bg-gray-50 w-full rounded-lg ${
+    <Link
+      className={`py-5 px-6 block hover:bg-gray-50 w-full rounded-lg ${
         active && "bg-gray-100"
       }`}
-      onClick={onClick}
+      href={path}
     >
       <div className="flex items-center">
         {active ? activeIcon : icon}
         <span className="ml-4 font-light">{label}</span>
       </div>
-    </button>
+    </Link>
   );
 };
 

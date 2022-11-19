@@ -17,7 +17,10 @@ export default async function handler(
 
     if (response.data?.token) {
       const cookies = Cookies(req, res);
-      cookies.set("token", response.data?.token);
+      cookies.set("token", response.data?.token, {
+        httpOnly: false,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) /* 7 days */,
+      });
     }
 
     res.status(200).send(response.data);

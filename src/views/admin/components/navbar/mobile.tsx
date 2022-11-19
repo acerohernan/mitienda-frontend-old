@@ -1,20 +1,19 @@
-import { IAdminView } from "../..";
+import Link from "next/link";
+import { INavItem } from ".";
 
 interface Props {
-  views: Array<IAdminView>;
-  selected: IAdminView;
-  handleSelect: (view: IAdminView) => () => void;
+  items: INavItem[];
 }
 
-const MobileNavbar: React.FC<Props> = ({ views, handleSelect, selected }) => {
+const MobileNavbar: React.FC<Props> = ({ items }) => {
   return (
     <div className="grid grid-cols-5 items-center justify-evenly bg-white md:hidden w-full fixed border bottom-0 z-10">
-      {views.map((view, index) => (
+      {items.map((item, index) => (
         <MobileNavBarItem
-          active={selected.label === view.label}
-          activeIcon={view.activeIcon}
-          icon={view.icon}
-          onSelect={handleSelect(view)}
+          active={false}
+          activeIcon={item.activeIcon}
+          icon={item.icon}
+          path={item.path}
           key={index}
         />
       ))}
@@ -26,18 +25,18 @@ interface MobileNavBarItemProps {
   active: boolean;
   activeIcon: JSX.Element;
   icon: JSX.Element;
-  onSelect: () => void;
+  path: string;
 }
 const MobileNavBarItem: React.FC<MobileNavBarItemProps> = ({
-  onSelect,
   icon,
   activeIcon,
   active,
+  path,
 }) => {
   return (
-    <button
-      onClick={onSelect}
+    <Link
       className="grid justify-center w-full hover:bg-gray-50 py-4"
+      href={path}
     >
       {active ? activeIcon : icon}
       <div
@@ -45,7 +44,7 @@ const MobileNavBarItem: React.FC<MobileNavBarItemProps> = ({
           active ? "bg-black" : "bg-white"
         }`}
       />
-    </button>
+    </Link>
   );
 };
 

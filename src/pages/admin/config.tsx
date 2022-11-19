@@ -1,13 +1,13 @@
 import { InferGetServerSidePropsType } from "next";
-import { API } from "../api";
-import { AdminProvider } from "../context/admin/AdminContext";
-import { IStore, ITenant } from "../context/admin/types";
+import { API } from "../../api";
+import { AdminProvider } from "../../context/admin/AdminContext";
+import { IStore, ITenant } from "../../context/admin/types";
 import {
   getTokenInServerSide,
   removeTokenInServerSide,
   withAuthentication,
-} from "../utils/server/ssr";
-import AdminView from "../views/admin";
+} from "../../utils/server/ssr";
+import AdminView from "../../views/admin";
 
 function StoreAdmin({
   store,
