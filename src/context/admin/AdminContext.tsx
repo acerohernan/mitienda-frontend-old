@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { API } from "../../api";
 import {
@@ -34,11 +35,12 @@ export const AdminProvider: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
 
   const toast = useToast();
+  const token: string = Cookies.get("token") || "";
 
   async function updateStore(form: UpdateStoreFormValues) {
     setLoading(true);
     try {
-      await API.tenant.updateStoreInformation(form);
+      await API.tenant.updateStoreInformation(form, token);
       toast.success("La tienda fue actualizada con éxito");
     } catch (err) {
       toast.error(getHttpError(err));
@@ -49,7 +51,7 @@ export const AdminProvider: React.FC<Props> = ({
   async function updateStoreSocial(form: UpdateStoreSocialFormValues) {
     setLoading(true);
     try {
-      await API.tenant.updateStoreSocial(form);
+      await API.tenant.updateStoreSocial(form, token);
       toast.success("Las redes sociales fueron editadas con éxito");
     } catch (err) {
       toast.error(getHttpError(err));
@@ -62,7 +64,7 @@ export const AdminProvider: React.FC<Props> = ({
     try {
       const formData = new FormData();
       formData.append("img", file);
-      const response = await API.tenant.uploadImage(formData);
+      const response = await API.tenant.uploadImage(formData, token);
       console.log(response);
     } catch (err) {
       console.log(err);

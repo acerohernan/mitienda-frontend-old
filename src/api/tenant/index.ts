@@ -46,15 +46,29 @@ export const getStoreSocialInformation = (token: string) =>
     },
   });
 
-export const updateStoreInformation = (form: UpdateStoreFormValues) =>
-  fecthData.put(`/api/tenant/store/information`, form);
-
-export const updateStoreSocial = (form: UpdateStoreSocialFormValues) =>
-  fecthData.put(`/api/tenant/store/social`, form);
-
-export const uploadImage = (form: FormData) =>
-  fecthData.post(`/api/tenant/upload/image`, form, {
+export const updateStoreInformation = (
+  form: UpdateStoreFormValues,
+  token: string
+) =>
+  fecthData.put(`${BASE_URL}/tenant/store/information`, form, {
     headers: {
-      "Content-Type": "multipart/formdata",
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+export const updateStoreSocial = (
+  form: UpdateStoreSocialFormValues,
+  token: string
+) =>
+  fecthData.put(`${BASE_URL}/tenant/store/social`, form, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+export const uploadImage = (form: FormData, token: string) =>
+  fecthData.post(`${BASE_URL}/tenant/upload/image`, form, {
+    headers: {
+      authorization: `Bearer ${token}`,
     },
   });
