@@ -1,6 +1,7 @@
 import React from "react";
 import { ITenant } from "../../../../context/admin/types";
 import AdminProfileAccount from "./account";
+import AdminProfileFooter from "./footer";
 import AdminProfileInformation from "./information";
 import AdminProfilePayment from "./payment";
 
@@ -15,6 +16,7 @@ const AdminProfile: React.FC<Props> = ({ tenant }) => {
         <AdminProfileAccount tenant={tenant} />
         <AdminProfileInformation tenant={tenant} />
         <AdminProfilePayment tenant={tenant} />
+        <AdminProfileFooter />
       </div>
     </div>
   );

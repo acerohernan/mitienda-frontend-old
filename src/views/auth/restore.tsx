@@ -18,6 +18,7 @@ const RestorePasswordView: React.FC<Props> = ({ validCode, code }) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [passwordRestored, setPasswordRestored] = useState(false);
 
   const {
     register,
@@ -34,13 +35,14 @@ const RestorePasswordView: React.FC<Props> = ({ validCode, code }) => {
   }, []);
 
   async function onSubmit(data: RestorePasswordFormValues) {
-    console.log(data);
+    await restorePassword(data);
   }
 
   async function restorePassword(data: RestorePasswordFormValues) {
     setLoading(true);
     try {
       await API.tenant.restorePassword(data);
+      setPasswordRestored(true);
     } catch (err) {
       toast.error(getHttpError(err));
     }
@@ -70,82 +72,94 @@ const RestorePasswordView: React.FC<Props> = ({ validCode, code }) => {
               </Link>
             </div>
           </>
-        ) : (
-          <p className="mb-10 font-light mt-4 max-w-md mx-auto text-center">
-            Ingresa tu email registrado para enviarte el link de
-            restablecimiento de contraseña
-          </p>
-        )}
-        {validCode ? (
-          <form
-            className="bg-blue-100/70 p-6 mb-16 w-full max-w-md mx-auto"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="grid grid-cols-[1fr_65px] gap-1 ">
-              <input
-                placeholder="Contraseña *"
-                className="input"
-                type={showPassword ? "text" : "password"}
-                {...register("password", {
-                  required: "El campo es requerido",
-                  pattern: {
-                    message:
-                      "La contraseña tiene que tener al menos una mayúscula, un número y 8 caracteres como mínimo",
-                    value: passwordRegex,
-                  },
-                })}
-              />
-              <button
-                className="input flex justify-center bg-white"
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <AiFillEye className="w-7 h-7 text-purple-700" />
-                ) : (
-                  <AiFillEyeInvisible className="w-7 h-7 text-purple-700" />
-                )}
-              </button>
-            </div>
-            {errors.password && (
-              <span className="input-err-msg">{errors.password?.message}</span>
-            )}
-            <div className="my-6" />
-            <div className="grid grid-cols-[1fr_65px] gap-1 ">
-              <input
-                placeholder="Confirmación de contraseña *"
-                className="input"
-                type={showPasswordConfirm ? "text" : "password"}
-                {...register("re_password", {
-                  required: "El campo es requerido",
-                  validate: (value) =>
-                    value === password_value || "Las contraseñas no coinciden",
-                })}
-              />
+        ) : null}
+        {validCode && !passwordRestored ? (
+          <>
+            <p className="mb-10 font-light mt-4 max-w-md mx-auto text-center">
+              Ingresa la nueva contraseña que usarás para iniciar sesión.
+            </p>
+            <form
+              className="bg-blue-100/70 p-6 mb-16 w-full max-w-md mx-auto"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="grid grid-cols-[1fr_65px] gap-1 ">
+                <input
+                  placeholder="Contraseña *"
+                  className="input"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "El campo es requerido",
+                    pattern: {
+                      message:
+                        "La contraseña tiene que tener al menos una mayúscula, un número y 8 caracteres como mínimo",
+                      value: passwordRegex,
+                    },
+                  })}
+                />
+                <button
+                  className="input flex justify-center bg-white"
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <AiFillEye className="w-7 h-7 text-purple-700" />
+                  ) : (
+                    <AiFillEyeInvisible className="w-7 h-7 text-purple-700" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <span className="input-err-msg">
+                  {errors.password?.message}
+                </span>
+              )}
+              <div className="my-6" />
+              <div className="grid grid-cols-[1fr_65px] gap-1 ">
+                <input
+                  placeholder="Confirmación de contraseña *"
+                  className="input"
+                  type={showPasswordConfirm ? "text" : "password"}
+                  {...register("re_password", {
+                    required: "El campo es requerido",
+                    validate: (value) =>
+                      value === password_value ||
+                      "Las contraseñas no coinciden",
+                  })}
+                />
 
-              <button
-                className="input flex justify-center bg-white"
-                type="button"
-                onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-              >
-                {showPasswordConfirm ? (
-                  <AiFillEye className="w-7 h-7 text-purple-700" />
-                ) : (
-                  <AiFillEyeInvisible className="w-7 h-7 text-purple-700" />
-                )}
-              </button>
-            </div>
-            {errors.re_password && (
-              <span className="input-err-msg">
-                {errors.re_password?.message}
-              </span>
-            )}
+                <button
+                  className="input flex justify-center bg-white"
+                  type="button"
+                  onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                >
+                  {showPasswordConfirm ? (
+                    <AiFillEye className="w-7 h-7 text-purple-700" />
+                  ) : (
+                    <AiFillEyeInvisible className="w-7 h-7 text-purple-700" />
+                  )}
+                </button>
+              </div>
+              {errors.re_password && (
+                <span className="input-err-msg">
+                  {errors.re_password?.message}
+                </span>
+              )}
 
-            <div className="my-6 mt-4" />
-            <Button className="w-full" submit loading={loading}>
-              RESTABLECER
-            </Button>
-          </form>
+              <div className="my-6 mt-4" />
+              <Button className="w-full" submit loading={loading}>
+                RESTABLECER
+              </Button>
+            </form>
+          </>
+        ) : null}
+        {passwordRestored ? (
+          <div className="bg-blue-100/70 p-6 mb-16 w-full max-w-md mx-auto font-light mt-8">
+            Tu contraseña se restableció correctamente. Utilizala para iniciar
+            sessión.
+            <Link href="/login" className="mt-4 link block text-center">
+              Ir al login
+            </Link>
+          </div>
         ) : null}
       </div>
     </div>
