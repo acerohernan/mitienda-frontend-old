@@ -15,12 +15,6 @@ function AdminPrices() {
 }
 
 export default AdminPrices;
-//Latest view
-{
-  /* <AdminProvider store={store} tenant={tenant}>
-          <AdminView />
-        </AdminProvider> */
-}
 
 export const getServerSideProps = withAuthentication(async (context) => {
   const token = getTokenInServerSide(context);

@@ -9,10 +9,14 @@ interface Props {
 const AdminProfileAccount: React.FC<Props> = ({ tenant }) => {
   return (
     <div className="text-center p-6 max-w-2xl mx-auto w-full">
-      <h1 className="text-3xl">{`${tenant.name} ${tenant.surname}`}</h1>
+      {tenant.name && tenant.surname ? (
+        <h1 className="text-3xl mb-6">{`${tenant.name || ""} ${
+          tenant.surname || ""
+        }`}</h1>
+      ) : null}
 
       <div>
-        <div className="grid gap-4 mt-6">
+        <div className="grid gap-4">
           <div className="border rounded-2xl bg-purple-600 p-6">
             <div className="flex justify-between">
               <div className="text-start ">
